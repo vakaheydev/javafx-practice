@@ -1,17 +1,23 @@
 package com.vaka.practice.dao;
 
 import com.vaka.practice.domain.Entity;
+import com.vaka.practice.domain.EntityTable;
 import com.vaka.practice.exception.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.vaka.practice.dao.JdbcUtils.getConnection;
 
+@Slf4j
 public class JdbcEntityDao implements EntityDao {
     @Override
     public void create(Entity entity) {
@@ -30,6 +36,9 @@ public class JdbcEntityDao implements EntityDao {
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
+            log.info("state: {}", e.getSQLState());
+            log.info("errorCode: {}", e.getErrorCode());
+            log.info("message: {}", e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -44,13 +53,7 @@ public class JdbcEntityDao implements EntityDao {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    Integer entityId = rs.getInt("id");
-                    String name = rs.getString("name");
-                    String description = rs.getString("description");
-                    LocalDate createdAt = mapDate(rs, "createdAt");
-                    LocalDate updatedAt = mapDate(rs, "updatedAt");
-
-                    entity = new Entity(entityId, name, description, createdAt, updatedAt);
+                    entity = mapEntity(rs);
                 } else {
                     throw new EntityNotFoundException(id);
                 }
@@ -63,11 +66,44 @@ public class JdbcEntityDao implements EntityDao {
     }
 
     @Override
+    public List<Entity> findAll() {
+        String sql = "SELECT * FROM Entity";
+         List<Entity> entities = new ArrayList<>();
+
+        try (var con = getConnection();
+             var pstmt = con.prepareStatement(sql)) {
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Entity entity = mapEntity(rs);
+                    entities.add(entity);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return entities;
+    }
+
+    @Override
     public void update(Entity entity) throws EntityNotFoundException {
         String sql = "UPDATE Entity SET name = ?, description = ?, createdAt = ?, updatedAt = ? WHERE id = ?;";
 
         try (var con = getConnection();
              var pstmt = con.prepareStatement(sql)) {
+            setEntityToPstmtUpdate(pstmt, entity);
+
+            int executed = pstmt.executeUpdate();
+            if (executed == 0) {
+                throw new EntityNotFoundException(entity.getId());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void setEntityToPstmtUpdate(PreparedStatement pstmt, Entity entity) {
+        try {
             pstmt.setInt(5, entity.getId());
             pstmt.setString(1, entity.getName());
             pstmt.setString(2, entity.getDescription());
@@ -76,11 +112,6 @@ public class JdbcEntityDao implements EntityDao {
 
             Date updatedAt = Date.valueOf(LocalDate.now());
             pstmt.setDate(4, updatedAt);
-
-            int executed = pstmt.executeUpdate();
-            if (executed == 0) {
-                throw new EntityNotFoundException(entity.getId());
-            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -125,5 +156,19 @@ public class JdbcEntityDao implements EntityDao {
         long timestamp = rs.getLong(columnName);
         Instant instant = Instant.ofEpochMilli(timestamp);
         return instant.atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    private Entity mapEntity(ResultSet rs) {
+        try {
+            Integer entityId = rs.getInt("id");
+            String name = rs.getString("name");
+            String description = rs.getString("description");
+            LocalDate createdAt = mapDate(rs, "createdAt");
+            LocalDate updatedAt = mapDate(rs, "updatedAt");
+
+            return new Entity(entityId, name, description, createdAt, updatedAt);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

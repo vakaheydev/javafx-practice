@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.chart.BubbleChart?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.vaka.practice.controller.CreateEntityController"
+      prefHeight="200.0" prefWidth="200.0">
+    <Label text="Name" style="-fx-font-size: 16px;"/>
+    <TextField fx:id="name" style="-fx-font-size: 16px;" />
+    <Label text="Description" style="-fx-font-size: 16px;"/>
+    <TextArea fx:id="description" style="-fx-font-size: 16px;"/>
+    <Button fx:id="btnSave" text="Save" onAction="#clickSave" style="-fx-font-size: 24px;"/>
+</VBox>

@@ -22,8 +22,8 @@ public class App extends Application {
 
         stage.setScene(scene);
         stage.setTitle("Hello JavaFX");
-        stage.setWidth(300);
-        stage.setHeight(400);
+        stage.setWidth(500);
+        stage.setHeight(800);
 
         stage.show();
     }

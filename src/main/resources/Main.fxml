@@ -1,19 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 
-<?import javafx.scene.chart.BubbleChart?>
-<FlowPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.vaka.practice.controller.MainController"
-            prefHeight="300" prefWidth="250" orientation="VERTICAL" vgap="10" hgap="10">
-    <FlowPane hgap="10" vgap="10">
-        <TextField fx:id="textField"/>
-        <Button fx:id="btn" text="Add" onAction="#click" />
-    </FlowPane>
-    <ListView fx:id="listView" prefHeight="100" prefWidth="50" />
-</FlowPane>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.vaka.practice.controller.MainController"
+      prefHeight="800" prefWidth="600" spacing="10">
+
+    <HBox spacing="10">
+        <Button fx:id="btnAdd" text="Add" onAction="#clickAdd" style="-fx-font-size: 16px;" />
+        <Button fx:id="btnDelete" text="Delete" onAction="#clickDelete" style="-fx-font-size: 16px;" />
+        <Button fx:id="btnEdit" text="Edit" onAction="#clickEdit" style="-fx-font-size: 16px;" />
+        <Button fx:id="btnRefresh" text="Refresh" onAction="#clickRefresh" style="-fx-font-size: 16px;" />
+    </HBox>
+
+    <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" style="-fx-font-size: 16px;" />
+            <TableColumn fx:id="nameColumn" text="Name" style="-fx-font-size: 16px;" />
+            <TableColumn fx:id="descriptionColumn" text="Description" style="-fx-font-size: 16px;" />
+            <TableColumn fx:id="createdAtColumn" text="Created At" style="-fx-font-size: 16px;" />
+            <TableColumn fx:id="updatedAtColumn" text="Updated At" style="-fx-font-size: 16px;" />
+        </columns>
+    </TableView>
+</VBox>

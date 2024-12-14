@@ -18,6 +18,11 @@ public class Entity {
         this.updatedAt = updatedAt;
     }
 
+    public Entity(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     private Integer id;
 
     @Size(min = 3, max = 50)

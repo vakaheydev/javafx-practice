@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.vaka.practice.controller.EditEntityController"
+            prefHeight="400.0" prefWidth="600.0">
+    <Label text="ID" style="-fx-font-size: 16px;"/>
+    <TextField fx:id="id" editable="false" style="-fx-font-size: 16px; -fx-text-fill: darkgrey;" />
+    <Label text="Name" style="-fx-font-size: 16px;"/>
+    <TextField fx:id="name" style="-fx-font-size: 16px;" />
+    <Label text="Description" style="-fx-font-size: 16px;"/>
+    <TextArea fx:id="description" style="-fx-font-size: 16px;"/>
+    <Label text="Created at" style="-fx-font-size: 16px;"/>
+    <TextField fx:id="createdAt" editable="false" style="-fx-font-size: 16px; -fx-text-fill: darkgrey;" />
+    <Label text="Last updated at" style="-fx-font-size: 16px;"/>
+    <TextField fx:id="updatedAt" editable="false" style="-fx-font-size: 16px; -fx-text-fill: darkgrey;" />
+
+    <Button fx:id="btnSave" text="Save" onAction="#clickSave" style="-fx-font-size: 24px;"/>
+</VBox>

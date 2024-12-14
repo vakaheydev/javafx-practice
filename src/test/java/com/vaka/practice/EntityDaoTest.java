@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -70,6 +71,21 @@ public class EntityDaoTest {
         assertEquals("NewDescription", entityById.getDescription());
         assertEquals(createdAtTest, entityById.getCreatedAt());
         assertNotNull(entityById.getUpdatedAt());
+    }
+
+    @DisplayName(("Should get all entities"))
+    @Test
+    public void testShouldFindAll() {
+        Entity entity = new Entity("TestName", "TestDescription", null, null);
+        entityDao.create(entity);
+        entityDao.create(entity);
+        entityDao.create(entity);
+
+        List<Entity> all = entityDao.findAll();
+
+        log.info(all.toString());
+
+        assertEquals(3, all.size());
     }
 
     @DisplayName("Should create and delete entity with ID 1")
