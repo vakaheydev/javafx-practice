@@ -88,6 +88,25 @@ public class EntityDaoTest {
         assertEquals(3, all.size());
     }
 
+    @DisplayName("Should get all with pagination")
+    @Test
+    public void testShouldGetAllWithPagination() {
+        Entity entity = new Entity("TestName", "TestDescription", null, null);
+        for (int i = 0; i < 100; i++) {
+            entityDao.create(entity);
+        }
+
+        assertEquals(100, entityDao.count());
+        assertEquals(100, entityDao.findAll().size());
+
+        for (int i = 1; i <= 20; i++) {
+            List<Entity> allWithPagination = entityDao.findAllWithPagination(i, 5);
+            log.info("{} p. | list = {}", i, allWithPagination);
+            assertEquals(5, allWithPagination.size());
+            assertEquals(i * 5, allWithPagination.get(4).getId());
+        }
+    }
+
     @DisplayName("Should create and delete entity with ID 1")
     @Test
     public void testShouldCreateAndDelete() throws EntityNotFoundException {

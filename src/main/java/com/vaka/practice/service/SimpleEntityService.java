@@ -40,6 +40,11 @@ public class SimpleEntityService implements EntityService {
     }
 
     @Override
+    public List<Entity> findAllWithPagination(int page, int pageSize) {
+        return dao.findAllWithPagination(page, pageSize);
+    }
+
+    @Override
     public void delete(Integer id) throws EntityNotFoundException {
         dao.delete(id);
     }

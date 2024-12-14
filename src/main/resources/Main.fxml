@@ -6,6 +6,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.vaka.practice.controller.MainController"
@@ -16,6 +20,20 @@
         <Button fx:id="btnDelete" text="Delete" onAction="#clickDelete" style="-fx-font-size: 16px;" />
         <Button fx:id="btnEdit" text="Edit" onAction="#clickEdit" style="-fx-font-size: 16px;" />
         <Button fx:id="btnRefresh" text="Refresh" onAction="#clickRefresh" style="-fx-font-size: 16px;" />
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Page" style="-fx-font-size: 16px;"/>
+        <TextField fx:id="textPage" onKeyReleased="#pageTyped" style="-fx-font-size: 16px;"
+                   prefWidth="50"/>
+        <Label fx:id="pageTotal" style="-fx-font-size: 16px;">
+            <HBox.margin>
+                <Insets right="20"/>
+            </HBox.margin>
+        </Label>
+        <Label text="Page size" style="-fx-font-size: 16px;"/>
+        <TextField fx:id="textPageSize" onKeyReleased="#pageSizeTyped" style="-fx-font-size: 16px;"
+                   prefWidth="50"/>
     </HBox>
 
     <TableView fx:id="tableView" VBox.vgrow="ALWAYS">

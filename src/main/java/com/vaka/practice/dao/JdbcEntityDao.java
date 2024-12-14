@@ -5,10 +5,7 @@ import com.vaka.practice.domain.EntityTable;
 import com.vaka.practice.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -80,6 +77,32 @@ public class JdbcEntityDao implements EntityDao {
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+
+        return entities;
+    }
+
+    @Override
+    public List<Entity> findAllWithPagination(int page, int pageSize) {
+        String sql = "SELECT * FROM Entity ORDER BY id LIMIT ? OFFSET ?";
+        List<Entity> entities = new ArrayList<>();
+
+        try (var con = getConnection();
+             var pstmt = con.prepareStatement(sql)) {
+
+            int offset = (page - 1) * pageSize;
+            pstmt.setInt(1, pageSize); // LIMIT
+            pstmt.setInt(2, offset);  // OFFSET
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Entity entity = mapEntity(rs);
+                    entities.add(entity);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error fetching paginated data", e);
         }
 
         return entities;

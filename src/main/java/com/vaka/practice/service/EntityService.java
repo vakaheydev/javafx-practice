@@ -10,6 +10,7 @@ public interface EntityService {
     void update(Integer id, Entity entity) throws EntityNotFoundException;
     Entity findById(Integer id) throws EntityNotFoundException;
     List<Entity> findAll();
+    List<Entity> findAllWithPagination(int page, int pageSize);
     void delete(Integer id) throws EntityNotFoundException;
     int count();
 }
