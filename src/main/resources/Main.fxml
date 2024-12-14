@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.chart.BubbleChart?>
+<FlowPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.vaka.practice.controller.MainController"
+            prefHeight="300" prefWidth="250" orientation="VERTICAL" vgap="10" hgap="10">
+    <FlowPane hgap="10" vgap="10">
+        <TextField fx:id="textField"/>
+        <Button fx:id="btn" text="Add" onAction="#click" />
+    </FlowPane>
+    <ListView fx:id="listView" prefHeight="100" prefWidth="50" />
+</FlowPane>
