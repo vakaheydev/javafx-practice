@@ -1,8 +1,5 @@
 package com.vaka.practice.dao;
 
-import com.vaka.practice.dao.EntityDao;
-import com.vaka.practice.dao.JdbcEntityDao;
-import com.vaka.practice.dao.JdbcUtils;
 import com.vaka.practice.domain.Entity;
 import com.vaka.practice.exception.EntityNotFoundException;
 import com.vaka.practice.util.TestsUtil;

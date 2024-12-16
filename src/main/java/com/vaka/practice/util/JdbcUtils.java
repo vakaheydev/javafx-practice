@@ -1,4 +1,4 @@
-package com.vaka.practice.dao;
+package com.vaka.practice.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

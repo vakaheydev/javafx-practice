@@ -14,7 +14,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.vaka.practice.dao.JdbcUtils.getConnection;
+import static com.vaka.practice.util.JdbcUtils.getConnection;
 
 @Slf4j
 public class JdbcEntityDao implements EntityDao {
