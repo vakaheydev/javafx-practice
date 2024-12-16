@@ -6,6 +6,7 @@ import jakarta.validation.*;
 public class SimpleValidationService implements ValidationService {
     private static final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private static final Validator validator = factory.getValidator();
+
     @Override
     public void validateEntity(Entity entity) {
         var violations = validator.validate(entity);

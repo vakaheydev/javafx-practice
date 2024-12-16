@@ -1,11 +1,13 @@
 package com.vaka.practice.dao;
 
 import com.vaka.practice.domain.Entity;
-import com.vaka.practice.domain.EntityTable;
 import com.vaka.practice.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
-import java.sql.*;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -63,12 +65,13 @@ public class JdbcEntityDao implements EntityDao {
     }
 
     @Override
-    public List<Entity> findAll() {
-        String sql = "SELECT * FROM Entity";
-         List<Entity> entities = new ArrayList<>();
+    public List<Entity> findByName(String name) {
+        String sql = "SELECT * FROM Entity WHERE name = ?;";
+        List<Entity> entities = new ArrayList<>();
 
         try (var con = getConnection();
              var pstmt = con.prepareStatement(sql)) {
+            pstmt.setString(1, name);
             try (ResultSet rs = pstmt.executeQuery()) {
                 while (rs.next()) {
                     Entity entity = mapEntity(rs);
@@ -80,6 +83,12 @@ public class JdbcEntityDao implements EntityDao {
         }
 
         return entities;
+    }
+
+    @Override
+    public List<Entity> findAll() {
+        String sql = "SELECT * FROM Entity";
+        return extractAll(sql);
     }
 
     @Override
@@ -167,7 +176,8 @@ public class JdbcEntityDao implements EntityDao {
                 if (rs.next()) {
                     return rs.getInt("cnt");
                 }
-            };
+            }
+            ;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -193,5 +203,23 @@ public class JdbcEntityDao implements EntityDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private List<Entity> extractAll(String sql) {
+        List<Entity> entities = new ArrayList<>();
+
+        try (var con = getConnection();
+             var pstmt = con.prepareStatement(sql)) {
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Entity entity = mapEntity(rs);
+                    entities.add(entity);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return entities;
     }
 }

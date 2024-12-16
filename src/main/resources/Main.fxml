@@ -10,6 +10,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="com.vaka.practice.controller.MainController"
@@ -35,6 +36,35 @@
         <TextField fx:id="textPageSize" onKeyReleased="#pageSizeTyped" style="-fx-font-size: 16px;"
                    prefWidth="50"/>
     </HBox>
+
+    <HBox>
+        <Label text="Search by name" style="-fx-font-size: 16px;"/>
+        <HBox.margin>
+            <Insets right="10"/>
+        </HBox.margin>
+        <TextField fx:id="textSearchName" onKeyReleased="#searchNameTyped" style="-fx-font-size: 16px;"/>
+    </HBox>
+
+    <Label text="Filters" style="-fx-font-size: 16px;"/>
+
+    <VBox>
+        <HBox>
+            <CheckBox fx:id="checkFilterNameStarts" text="Name starts with" style="-fx-font-size: 16px;"/>
+            <TextField fx:id="textFilterNameStarts" style="-fx-font-size: 16px;"/>
+        </HBox>
+        <HBox>
+            <CheckBox fx:id="checkFilterDescriptionStarts" text="Description starts with" style="-fx-font-size: 16px;"/>
+            <TextField fx:id="textFilterDescriptionStarts" style="-fx-font-size: 16px;"/>
+        </HBox>
+        <HBox>
+            <CheckBox fx:id="checkFilterIdGreater" text="ID greater or equals" style="-fx-font-size: 16px;"/>
+            <TextField fx:id="textFilterIdGreater" style="-fx-font-size: 16px;"/>
+        </HBox>
+        <HBox>
+            <CheckBox fx:id="checkFilterIdLess" text="ID less or equals" style="-fx-font-size: 16px;"/>
+            <TextField fx:id="textFilterIdLess" style="-fx-font-size: 16px;"/>
+        </HBox>
+    </VBox>
 
     <TableView fx:id="tableView" VBox.vgrow="ALWAYS">
         <columns>

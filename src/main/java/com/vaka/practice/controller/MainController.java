@@ -21,24 +21,13 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.function.Predicate;
+
+import static com.vaka.practice.util.AlertUtil.*;
 
 @Slf4j
 public class MainController {
-    @FXML
-    private TableView<EntityTable> tableView;
-
-    @FXML
-    private TextField textPage;
-
-    @FXML
-    private TextField textPageSize;
-
-    @FXML
-    private Label pageTotal;
-
-    private int pageSize = 5;
-
-    private int currentPage = 1;
+    // <--- Table --->
 
     private ObservableList<EntityTable> obsList;
 
@@ -58,6 +47,51 @@ public class MainController {
     private TableColumn<EntityTable, String> updatedAtColumn;
 
     @FXML
+    private TableView<EntityTable> tableView;
+
+    // <--- Text Inputs --->
+
+    @FXML
+    private TextField textPage;
+
+    @FXML
+    private TextField textPageSize;
+
+    @FXML
+    private TextField textSearchName;
+
+    // <--- Filters --->
+
+    @FXML
+    private TextField textFilterNameStarts;
+
+    @FXML
+    private TextField textFilterDescriptionStarts;
+
+    @FXML
+    private TextField textFilterIdGreater;
+
+    @FXML
+    private TextField textFilterIdLess;
+
+    @FXML
+    private CheckBox checkFilterNameStarts;
+
+    @FXML
+    private CheckBox checkFilterDescriptionStarts;
+
+    @FXML
+    private CheckBox checkFilterIdGreater;
+
+    @FXML
+    private CheckBox checkFilterIdLess;
+
+    @FXML
+    private Label pageTotal;
+
+    // <--- Buttons --->
+
+    @FXML
     private Button btnAdd;
 
     @FXML
@@ -68,6 +102,12 @@ public class MainController {
 
     @FXML
     private Button btnRefresh;
+
+    // <--- Fields --->
+
+    private int pageSize = 5;
+
+    private int currentPage = 1;
 
     private final EntityService entityService = ServiceFactory.getEntityService();
 
@@ -107,24 +147,18 @@ public class MainController {
             EntityTable entityTable = entityTableReadOnlyObjectProperty.get();
 
             if (entityTable == null) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.setTitle("Warning");
-                alert.setHeaderText("You've chosen nothing!");
-                alert.showAndWait();
+                warnAlert("You've chosen nothing!");
                 return;
             }
 
             Entity entity = entityService.findById(entityTable.getId());
-
             editEntityController.setTextFields(entity);
 
             Stage stage = new Stage();
             stage.setTitle("Update Entity");
             stage.setScene(new Scene(root, 450, 450));
             stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (EntityNotFoundException e) {
+        } catch (IOException | EntityNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
@@ -137,10 +171,7 @@ public class MainController {
         EntityTable entityTable = entityTableReadOnlyObjectProperty.get();
 
         if (entityTable == null) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Warning");
-            alert.setHeaderText("You've chosen nothing!");
-            alert.showAndWait();
+            warnAlert("You've chosen nothing!");
             return;
         }
 
@@ -189,7 +220,7 @@ public class MainController {
     public void pageTyped(KeyEvent event) {
         String text = textPage.getText();
 
-        if (text == null || text.isEmpty()) {
+        if (!isTextValid(text)) {
             return;
         }
 
@@ -197,10 +228,7 @@ public class MainController {
             int pageNumber = Integer.parseInt(text);
 
             if (totalPages == 0) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("There is no data. Please, add something");
-                alert.showAndWait();
+                errorAlert("There is no data. Please, add something");
                 textPage.clear();
                 return;
             }
@@ -212,10 +240,7 @@ public class MainController {
             log.debug("Page number: {}", pageNumber);
             refreshTable(pageNumber);
         } catch (NumberFormatException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Validation error");
-            alert.setHeaderText(String.format("Number of page should be a positive integer in range[%d - %d]", 1, totalPages));
-            alert.showAndWait();
+            errorAlert(String.format("Number of page should be a positive integer in range[%d - %d]", 1, totalPages));
             textPage.clear();
         }
     }
@@ -224,7 +249,7 @@ public class MainController {
     public void pageSizeTyped(KeyEvent event) {
         String text = textPageSize.getText();
 
-        if (text == null || text.isEmpty()) {
+        if (!isTextValid(text)) {
             return;
         }
 
@@ -232,10 +257,7 @@ public class MainController {
             int pages = Integer.parseInt(text);
 
             if (totalPages == 0) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("There is no data. Please, add something");
-                alert.showAndWait();
+                errorAlert("There is no data. Please, add something");
                 textPage.clear();
                 return;
             }
@@ -248,18 +270,133 @@ public class MainController {
             this.pageSize = pages;
             refreshTable(currentPage);
         } catch (NumberFormatException ex) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Validation error");
-            alert.setHeaderText(String.format("Number of page should be a positive integer in range[%d - %d]", 1, totalPages));
-            alert.showAndWait();
+            errorAlert(String.format("Number of page should be a positive integer in range[%d - %d]", 1, totalPages));
             textPage.clear();
         }
     }
 
     @FXML
+    public void searchNameTyped(KeyEvent event) {
+        String name = textSearchName.getText();
+
+        if (!isTextValid(name)) {
+            refreshTable(currentPage);
+            return;
+        }
+
+        List<Entity> byName = entityService.findByName(name);
+        List<EntityTable> entityTable = byName.stream()
+                .map(EntityTable::fromEntity)
+                .toList();
+
+        if (!entityTable.isEmpty()) {
+            infoAlert(String.format("Found %d entities with specified name", entityTable.size()));
+        }
+
+        obsList = FXCollections.observableArrayList(entityTable);
+        tableView.setItems(obsList);
+
+    }
+
+    private boolean isTextValid(String text) {
+        return text != null && !text.isEmpty();
+    }
+
+    public void filterClicked() {
+        boolean nameSelected = checkFilterNameStarts.isSelected();
+        boolean descSelected = checkFilterDescriptionStarts.isSelected();
+        boolean idGreaterSelected = checkFilterIdGreater.isSelected();
+        boolean idLessSelected = checkFilterIdLess.isSelected();
+
+        String nameText = textFilterNameStarts.getText();
+        String descText = textFilterDescriptionStarts.getText();
+        String idGreaterText = textFilterIdGreater.getText();
+        String idLessText = textFilterIdLess.getText();
+
+        if (nameSelected) {
+            filterTableByPredicate(x -> x.getName().startsWith(nameText), nameText, nameSelected);
+        }
+
+        if (descSelected) {
+            filterTableByPredicate(x -> x.getDescription().startsWith(descText), descText, descSelected);
+        }
+
+        if (idGreaterSelected) {
+            int id = getIdFromText(idGreaterText);
+
+            if (id == -1) {
+                return;
+            }
+
+            filterTableByPredicate(x -> x.getId() >= id, idGreaterText, idGreaterSelected);
+        }
+
+        if (idLessSelected) {
+            int id = getIdFromText(idLessText);
+
+            if (id == -1) {
+                return;
+            }
+
+            filterTableByPredicate(x -> x.getId() <= id, idLessText, idLessSelected);
+        }
+
+        if (!nameSelected && !descSelected && !idGreaterSelected && !idLessSelected) {
+            refreshTable(currentPage);
+        }
+    }
+
+    private int getIdFromText(String text) {
+        int id;
+
+        try {
+            id = Integer.parseInt(text);
+
+            if (id < 0) {
+                throw new NumberFormatException();
+            }
+            return id;
+        } catch (NumberFormatException ex) {
+            errorAlert("ID should be an integer in range [0, inf]");
+            return -1;
+        }
+
+    }
+
+    private void filterTableByPredicate(Predicate<EntityTable> predicate, String text, boolean selected) {
+        if (text == null || text.isEmpty()) {
+            refreshTable(currentPage);
+            return;
+        }
+
+        if (selected) {
+            List<EntityTable> filtered = obsList.stream()
+                    .filter(predicate)
+                    .toList();
+
+            obsList = FXCollections.observableArrayList(filtered);
+            tableView.setItems(obsList);
+        } else {
+            refreshTable(currentPage);
+        }
+    }
+
+    private void handleCheckBoxEvent(CheckBox checkBox) {
+        if (!checkBox.isSelected()) {
+            obsList = FXCollections.observableArrayList(
+                    entityService.findAllWithPagination(currentPage, pageSize).stream()
+                            .map(EntityTable::fromEntity)
+                            .toList()
+            );
+        }
+
+        filterClicked();
+    }
+
+    @FXML
     void initialize() {
-        dbInit();
         refreshTable(currentPage);
+//        entityService.init();
 
         textPage.setText(String.valueOf(1));
         textPage.setFocusTraversable(false);
@@ -271,13 +408,11 @@ public class MainController {
         createdAtColumn.setCellValueFactory(new PropertyValueFactory<>("createdAt"));
         updatedAtColumn.setCellValueFactory(new PropertyValueFactory<>("updatedAt"));
 
-        log.info("Initialized successfully");
-    }
+        checkFilterNameStarts.setOnAction(event -> handleCheckBoxEvent(checkFilterNameStarts));
+        checkFilterDescriptionStarts.setOnAction(event -> handleCheckBoxEvent(checkFilterDescriptionStarts));
+        checkFilterIdGreater.setOnAction(event -> handleCheckBoxEvent(checkFilterIdGreater));
+        checkFilterIdLess.setOnAction(event -> handleCheckBoxEvent(checkFilterIdLess));
 
-    private void dbInit() {
-        Entity entity = new Entity("CoolName", "Very cool description");
-        for (int i = 0; i < 5; i++) {
-            entityService.save(entity);
-        }
+        log.info("Initialized successfully");
     }
 }

@@ -6,12 +6,13 @@ import com.vaka.practice.service.EntityService;
 import jakarta.validation.ValidationException;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 import lombok.extern.slf4j.Slf4j;
+
+import static com.vaka.practice.util.AlertUtil.errorAlert;
+import static com.vaka.practice.util.AlertUtil.infoAlert;
 
 @Slf4j
 public class CreateEntityController {
@@ -30,17 +31,11 @@ public class CreateEntityController {
         log.info("Saved entity: {}", entity);
         try {
             entityService.save(entity);
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Validation error");
-            alert.setHeaderText("Saved successfully!");
-            alert.showAndWait();
+            infoAlert("Saved successfully!");
             closeWindow();
             mainController.refreshTable();
-        } catch (ValidationException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Validation error");
-            alert.setHeaderText(e.getMessage());
-            alert.showAndWait();
+        } catch (ValidationException ex) {
+            errorAlert(ex.getMessage());
         }
     }
 

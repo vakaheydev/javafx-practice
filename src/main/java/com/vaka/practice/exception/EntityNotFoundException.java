@@ -1,7 +1,7 @@
 package com.vaka.practice.exception;
 
 public class EntityNotFoundException extends Exception {
-    public EntityNotFoundException(Integer id) {
-        super(String.format("Entity with ID %d is not found", id));
+    public EntityNotFoundException(Object id) {
+        super(String.format("Entity with identifier %s is not found", id));
     }
 }

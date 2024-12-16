@@ -39,7 +39,7 @@ public class EntityTable {
     }
 
     public void setId(int id) {
-         this.id.set(id);
+        this.id.set(id);
     }
 
     public String getName() {
