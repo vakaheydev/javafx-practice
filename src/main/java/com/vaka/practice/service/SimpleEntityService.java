@@ -24,13 +24,26 @@ public class SimpleEntityService implements EntityService {
     @Override
     public void update(Integer id, Entity entity) throws EntityNotFoundException {
         validationService.validateEntity(entity);
+        checkExists(id);
         entity.setId(id);
         dao.update(entity);
     }
 
     @Override
     public Entity findById(Integer id) throws EntityNotFoundException {
+        checkExists(id);
         return dao.findById(id);
+    }
+
+    @Override
+    public boolean existsById(Integer id) {
+        return dao.findById(id) != null;
+    }
+
+    private void checkExists(Integer id) throws EntityNotFoundException {
+        if (!existsById(id)) {
+            throw new EntityNotFoundException(id);
+        }
     }
 
     @Override
@@ -50,6 +63,7 @@ public class SimpleEntityService implements EntityService {
 
     @Override
     public void delete(Integer id) throws EntityNotFoundException {
+        checkExists(id);
         dao.delete(id);
     }
 

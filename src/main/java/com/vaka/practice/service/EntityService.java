@@ -12,6 +12,8 @@ public interface EntityService {
 
     Entity findById(Integer id) throws EntityNotFoundException;
 
+    boolean existsById(Integer id);
+
     List<Entity> findByName(String name);
 
     List<Entity> findAll();

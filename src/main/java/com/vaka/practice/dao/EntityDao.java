@@ -7,8 +7,7 @@ import java.util.List;
 
 public interface EntityDao {
     void create(Entity entity);
-
-    Entity findById(Integer id) throws EntityNotFoundException;
+    Entity findById(Integer id);
 
     List<Entity> findByName(String name);
 
@@ -16,9 +15,9 @@ public interface EntityDao {
 
     List<Entity> findAllWithPagination(int page, int pageSize);
 
-    void update(Entity entity) throws EntityNotFoundException;
+    void update(Entity entity);
 
-    void delete(Integer id) throws EntityNotFoundException;
+    void delete(Integer id);
 
     int count();
 }

@@ -24,7 +24,7 @@ public class EntityDaoTest {
 
     @DisplayName("Should create and find entity with ID 1")
     @Test
-    public void testShouldCreateAndFindEntity() throws EntityNotFoundException {
+    public void testShouldCreateAndFindEntity() {
         Entity entity = new Entity("TestName", "TestDescription", null, null);
         entityDao.create(entity);
 
@@ -44,7 +44,7 @@ public class EntityDaoTest {
 
     @DisplayName("Should create, update and find entity with ID 1")
     @Test
-    public void testShouldCreateUpdateFindEntity() throws EntityNotFoundException {
+    public void testShouldCreateUpdateFindEntity() {
         Entity entity = new Entity("TestName", "TestDescription", null, null);
         entityDao.create(entity);
 
@@ -105,7 +105,7 @@ public class EntityDaoTest {
 
     @DisplayName("Should create and delete entity with ID 1")
     @Test
-    public void testShouldCreateAndDelete() throws EntityNotFoundException {
+    public void testShouldCreateAndDelete() {
         Entity entity = new Entity("TestName", "TestDescription", null, null);
         entityDao.create(entity);
 
@@ -114,16 +114,13 @@ public class EntityDaoTest {
         entityDao.delete(1);
 
         assertEquals(0, entityDao.count());
-        assertThrows(EntityNotFoundException.class, () -> entityDao.findById(1));
+        assertNull(entityDao.findById(1));
     }
 
-    @DisplayName("Should throw EntityNotFoundException")
+    @DisplayName("Should find null (wrong ID)")
     @Test
-    public void testShouldThrowEntityNotFoundException() throws EntityNotFoundException {
+    public void testShouldThrowEntityNotFoundException()  {
         assertEquals(0, entityDao.count());
-        assertThrows(EntityNotFoundException.class, () -> entityDao.findById(1));
-        assertThrows(EntityNotFoundException.class, () -> entityDao.update(new Entity(1, "x", "x", LocalDate.now(),
-                LocalDate.now()       )));
-        assertThrows(EntityNotFoundException.class, () -> entityDao.delete(1));
+        assertNull(entityDao.findById(1));
     }
 }

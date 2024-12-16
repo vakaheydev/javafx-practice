@@ -43,7 +43,7 @@ public class JdbcEntityDao implements EntityDao {
     }
 
     @Override
-    public Entity findById(Integer id) throws EntityNotFoundException {
+    public Entity findById(Integer id)  {
         String sql = "SELECT * FROM Entity WHERE id = ?;";
         Entity entity = null;
 
@@ -54,7 +54,7 @@ public class JdbcEntityDao implements EntityDao {
                 if (rs.next()) {
                     entity = mapEntity(rs);
                 } else {
-                    throw new EntityNotFoundException(id);
+                    return null;
                 }
             }
         } catch (SQLException e) {
@@ -118,17 +118,14 @@ public class JdbcEntityDao implements EntityDao {
     }
 
     @Override
-    public void update(Entity entity) throws EntityNotFoundException {
+    public void update(Entity entity) {
         String sql = "UPDATE Entity SET name = ?, description = ?, createdAt = ?, updatedAt = ? WHERE id = ?;";
 
         try (var con = getConnection();
              var pstmt = con.prepareStatement(sql)) {
             setEntityToPstmtUpdate(pstmt, entity);
 
-            int executed = pstmt.executeUpdate();
-            if (executed == 0) {
-                throw new EntityNotFoundException(entity.getId());
-            }
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -150,17 +147,14 @@ public class JdbcEntityDao implements EntityDao {
     }
 
     @Override
-    public void delete(Integer id) throws EntityNotFoundException {
+    public void delete(Integer id) {
         String sql = "DELETE FROM Entity WHERE id = ?;";
 
         try (var con = getConnection();
              var pstmt = con.prepareStatement(sql)) {
             pstmt.setInt(1, id);
 
-            int executed = pstmt.executeUpdate();
-            if (executed == 0) {
-                throw new EntityNotFoundException(id);
-            }
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
