@@ -16,14 +16,16 @@ import static com.vaka.practice.util.AlertUtil.infoAlert;
 
 @Slf4j
 public class CreateEntityController {
-    private MainController mainController;
-    EntityService entityService = ServiceFactory.getEntityService();
-
+    // <--- Text Inputs --->
     @FXML
     private TextField name;
 
     @FXML
     private TextArea description;
+
+    // <--- Fields --->
+    private MainController mainController;
+    EntityService entityService = ServiceFactory.getEntityService();
 
     @FXML
     public void clickSave(ActionEvent event) {

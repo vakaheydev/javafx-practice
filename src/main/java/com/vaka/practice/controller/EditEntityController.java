@@ -17,9 +17,7 @@ import java.time.LocalDate;
 import static com.vaka.practice.util.AlertUtil.errorAlert;
 
 public class EditEntityController {
-    private MainController mainController;
-
-    private EntityService entityService = ServiceFactory.getEntityService();
+    // <--- Text Inputs --->
 
     @FXML
     private TextField id;
@@ -36,8 +34,15 @@ public class EditEntityController {
     @FXML
     private TextField updatedAt;
 
+    // <--- Buttons --->
+
     @FXML
     Button btnSave;
+
+    // <--- Fields --->
+    private MainController mainController;
+
+    private EntityService entityService = ServiceFactory.getEntityService();
 
     @FXML
     public void clickSave(ActionEvent event) {

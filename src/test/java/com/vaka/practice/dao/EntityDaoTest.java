@@ -1,10 +1,11 @@
-package com.vaka.practice;
+package com.vaka.practice.dao;
 
 import com.vaka.practice.dao.EntityDao;
 import com.vaka.practice.dao.JdbcEntityDao;
 import com.vaka.practice.dao.JdbcUtils;
 import com.vaka.practice.domain.Entity;
 import com.vaka.practice.exception.EntityNotFoundException;
+import com.vaka.practice.util.TestsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -18,12 +19,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 public class EntityDaoTest {
     private EntityDao entityDao = new JdbcEntityDao();
-    private static final String TABLE_NAME = "Entity";
 
     @BeforeEach
     public void setup() {
-        JdbcUtils.resetSequence(TABLE_NAME);
-        JdbcUtils.deleteAll(TABLE_NAME);
+        TestsUtil.clearDb();
     }
 
     @DisplayName("Should create and find entity with ID 1")

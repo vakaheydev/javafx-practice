@@ -11,6 +11,8 @@
   <url>http://maven.apache.org</url>
 
   <properties>
+    <jakarta.el.version>4.0.2</jakarta.el.version>
+    <textfx.version>4.0.18</textfx.version>
     <javafx.version>21</javafx.version>
     <jupiter.version>5.10.2</jupiter.version>
     <jdbc.sqlite.version>3.47.1.0</jdbc.sqlite.version>
@@ -76,14 +78,25 @@
       <version>${hibernate.validator.version}</version>
     </dependency>
 
-    <!-- https://mvnrepository.com/artifact/org.glassfish/jakarta.el -->
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>jakarta.el</artifactId>
-      <version>4.0.2</version>
+      <version>${jakarta.el.version}</version>
     </dependency>
 
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-core</artifactId>
+      <version>${textfx.version}</version>
+      <scope>test</scope>
+    </dependency>
 
+    <dependency>
+      <groupId>org.testfx</groupId>
+      <artifactId>testfx-junit5</artifactId>
+      <version>${textfx.version}</version>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
