@@ -23,8 +23,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class EntityServiceTest {
     private EntityService service = new SimpleEntityService(new JdbcEntityDao(), new SimpleValidationService());
 
-    private static final String TABLE_NAME = "Entity";
-
     @BeforeEach
     public void setup() {
         TestsUtil.clearDb();
