@@ -410,8 +410,8 @@ public class MainController {
 
     @FXML
     void initialize() {
-        refreshTable(currentPage);
         entityService.init();
+        refreshTable(currentPage);
 
         textPage.setText(String.valueOf(1));
         textPage.setFocusTraversable(false);
