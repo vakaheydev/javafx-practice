@@ -410,7 +410,6 @@ public class MainController {
 
     @FXML
     void initialize() {
-        entityService.init();
         refreshTable(currentPage);
 
         textPage.setText(String.valueOf(1));
