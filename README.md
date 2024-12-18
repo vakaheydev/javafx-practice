@@ -92,14 +92,15 @@ practice/
 1. **Клонируйте репозиторий**:
    ```bash
    git clone https://github.com/vakaheydev/javafx-practice.git
+   cd javafx-practice
    ```
-   Соберите проект
+2. **Соберите проект**
    ```bash
-   mvn clean package
+   mvn clean package -DskipTests=true
    ```
-   Запустите .jar файл
+3. **Запустите .jar файл**
    ```bash
-   java -jar <name>.jar
+   java -jar target/studying-practice-1.0-SNAPSHOT.jar
    ```
 ---
 
