@@ -21,9 +21,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static com.vaka.practice.util.AlertUtil.*;
+import static javafx.scene.control.Alert.AlertType.*;
 
 @Slf4j
 public class MainController {
@@ -176,11 +178,24 @@ public class MainController {
         }
 
         log.info("Clicked on: {}", entityTable);
-        try {
-            entityService.delete(entityTable.getId());
-        } catch (EntityNotFoundException e) {
-            throw new RuntimeException(e);
+
+        Alert alert = new Alert(CONFIRMATION);
+        alert.setTitle("Delete");
+        alert.setHeaderText("Do you really want to delete this entity?");
+
+        Optional<ButtonType> option = alert.showAndWait();
+
+        if (option.isEmpty() || option.get() == ButtonType.CANCEL) {
+            return;
+        } else if (option.get() == ButtonType.OK) {
+            try {
+                entityService.delete(entityTable.getId());
+            } catch (EntityNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+
         }
+
         refreshTable();
     }
 

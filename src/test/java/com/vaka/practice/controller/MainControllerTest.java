@@ -145,11 +145,13 @@ public class MainControllerTest extends ApplicationTest {
 
         TableView<?> tableView = lookup("#tableView").queryTableView();
 
-        interact(() -> {
-            tableView.getSelectionModel().selectFirst();
-        });
+        interact(() -> tableView.getSelectionModel().selectFirst());
 
         clickOn(btn);
+
+        Button okBtn = lookup(".button").queryButton();
+        clickOn(okBtn);
+
         waitForFxEvents();
 
         assertThrows(EntityNotFoundException.class, () -> service.findById(1));
