@@ -1,11 +1,13 @@
 package com.vaka.practice.util;
 
+import com.vaka.practice.config.DBConfig;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class JdbcUtils {
-    private static final String DB_URL = "jdbc:sqlite:src/main/resources/db/practice.db";
+    private static final String DB_URL = DBConfig.getDatabaseUrl();
 
     public static Connection getConnection() {
         try {
