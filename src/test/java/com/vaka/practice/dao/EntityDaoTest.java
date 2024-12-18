@@ -1,9 +1,9 @@
 package com.vaka.practice.dao;
 
 import com.vaka.practice.domain.Entity;
-import com.vaka.practice.exception.EntityNotFoundException;
 import com.vaka.practice.util.TestsUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @Slf4j
 public class EntityDaoTest {
     private EntityDao entityDao = new JdbcEntityDao();
+
+    @AfterAll
+    public static void destroy() {
+        TestsUtil.clearDb();
+    }
 
     @BeforeEach
     public void setup() {
@@ -119,7 +124,7 @@ public class EntityDaoTest {
 
     @DisplayName("Should find null (wrong ID)")
     @Test
-    public void testShouldThrowEntityNotFoundException()  {
+    public void testShouldThrowEntityNotFoundException() {
         assertEquals(0, entityDao.count());
         assertNull(entityDao.findById(1));
     }

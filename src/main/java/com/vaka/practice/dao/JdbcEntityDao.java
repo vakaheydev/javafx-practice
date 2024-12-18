@@ -1,7 +1,6 @@
 package com.vaka.practice.dao;
 
 import com.vaka.practice.domain.Entity;
-import com.vaka.practice.exception.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Date;
@@ -43,7 +42,7 @@ public class JdbcEntityDao implements EntityDao {
     }
 
     @Override
-    public Entity findById(Integer id)  {
+    public Entity findById(Integer id) {
         String sql = "SELECT * FROM Entity WHERE id = ?;";
         Entity entity = null;
 

@@ -8,13 +8,13 @@ import com.vaka.practice.util.TestsUtil;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import java.time.LocalDate;
@@ -27,6 +27,11 @@ import static org.testfx.util.WaitForAsyncUtils.waitForFxEvents;
 public class CreateEntityControllerTest extends ApplicationTest {
     private static CreateEntityController controller;
     private static EntityService service;
+
+    @AfterAll
+    public static void destroy() {
+        TestsUtil.clearDb();
+    }
 
     @BeforeAll
     public static void staticSetup() {

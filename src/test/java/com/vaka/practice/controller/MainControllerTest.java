@@ -1,23 +1,17 @@
 package com.vaka.practice.controller;
 
-import com.vaka.practice.domain.Entity;
 import com.vaka.practice.domain.EntityTable;
 import com.vaka.practice.exception.EntityNotFoundException;
 import com.vaka.practice.factory.ServiceFactory;
 import com.vaka.practice.service.EntityService;
 import com.vaka.practice.util.TestsUtil;
-import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.testfx.framework.junit5.ApplicationTest;
 
 import java.time.LocalDate;
@@ -34,6 +28,11 @@ public class MainControllerTest extends ApplicationTest {
     @BeforeAll
     public static void staticSetup() {
         service = ServiceFactory.getEntityService();
+    }
+
+    @AfterAll
+    public static void destroy() {
+        TestsUtil.clearDb();
     }
 
     @BeforeEach
@@ -312,10 +311,9 @@ public class MainControllerTest extends ApplicationTest {
         clickOn(searchField);
         waitForFxEvents();
 
-        type(CAPS, I, CAPS, V, A, N);
+        write("Ivan");
 
         waitForFxEvents();
-        sleep(250);
 
         DialogPane alert = lookup(".alert").query();
         String headerText = alert.getHeaderText();

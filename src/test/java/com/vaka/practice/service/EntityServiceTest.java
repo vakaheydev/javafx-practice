@@ -3,12 +3,10 @@ package com.vaka.practice.service;
 import com.vaka.practice.dao.JdbcEntityDao;
 import com.vaka.practice.domain.Entity;
 import com.vaka.practice.exception.EntityNotFoundException;
-import com.vaka.practice.service.EntityService;
-import com.vaka.practice.service.SimpleEntityService;
-import com.vaka.practice.service.SimpleValidationService;
 import com.vaka.practice.util.TestsUtil;
 import jakarta.validation.ValidationException;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -17,11 +15,15 @@ import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @Slf4j
 public class EntityServiceTest {
     private EntityService service = new SimpleEntityService(new JdbcEntityDao(), new SimpleValidationService());
+
+    @AfterAll
+    public static void destroy() {
+        TestsUtil.clearDb();
+    }
 
     @BeforeEach
     public void setup() {
@@ -127,7 +129,8 @@ public class EntityServiceTest {
     public void testShouldThrowEntityNotFoundException() throws EntityNotFoundException {
         assertEquals(0, service.count());
         assertThrows(EntityNotFoundException.class, () -> service.findById(1));
-        assertThrows(EntityNotFoundException.class, () -> service.update(1, new Entity(1, "xxx", "x", LocalDate.now(), LocalDate.now())));
+        assertThrows(EntityNotFoundException.class,
+                () -> service.update(1, new Entity(1, "xxx", "x", LocalDate.now(), LocalDate.now())));
         assertThrows(EntityNotFoundException.class, () -> service.delete(1));
     }
 
