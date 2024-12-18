@@ -149,6 +149,8 @@ public class MainControllerTest extends ApplicationTest {
 
         clickOn(btn);
 
+        waitForFxEvents();
+
         Button okBtn = lookup(".button").queryButton();
         clickOn(okBtn);
 
