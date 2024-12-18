@@ -6,6 +6,7 @@ import com.vaka.practice.exception.EntityNotFoundException;
 import com.vaka.practice.factory.ServiceFactory;
 import com.vaka.practice.service.EntityService;
 import com.vaka.practice.util.TestsUtil;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -39,7 +40,8 @@ public class MainControllerTest extends ApplicationTest {
     public void setup() {
         TestsUtil.clearDb();
         service.init();
-        mainController.refreshTable();
+        interact(() -> mainController.refreshTable());
+        waitForFxEvents();
     }
 
     @Override
@@ -51,6 +53,7 @@ public class MainControllerTest extends ApplicationTest {
         stage.setScene(new Scene(root));
         stage.show();
 
+        waitForFxEvents();
         sleep(1500);
     }
 
@@ -185,12 +188,14 @@ public class MainControllerTest extends ApplicationTest {
     @DisplayName("Should filter by description")
     @Test
     public void testFilterByDescription() {
+        sleep(500);
         CheckBox checkBox = lookup("#checkFilterDescriptionStarts").query();
         TextField textField = lookup("#textFilterDescriptionStarts").query();
 
         textField.setText("IT");
 
         clickOn(checkBox);
+
         waitForFxEvents();
 
         TableView<?> tableView = lookup("#tableView").queryTableView();
